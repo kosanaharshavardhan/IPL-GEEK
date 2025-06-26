@@ -1,91 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>IPL Nexus 2025</title>
-  <style>
-    :root {
-      --bg: #f0f0f0;
-      --fg: #333;
-      --accent: #005a9c;
-    }
-    [data-theme="dark"] {
-      --bg: #1e1e1e;
-      --fg: #eee;
-      --accent: #ff9800;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: var(--bg); color: var(--fg); transition: background .5s, color .5s; }
-    header { padding: 20px; text-align: center; background: var(--accent); color: white; }
-    .theme-toggle { position: absolute; top: 20px; right: 20px; cursor: pointer; }
-    nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; background: var(--bg); }
-    nav button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background: var(--accent); color: white; transition: transform .3s; }
-    nav button:hover { transform: scale(1.1); }
-    section { max-width: 900px; margin: 20px auto; }
-    .team { margin-bottom: 10px; border: 2px solid var(--accent); border-radius: 8px; overflow: hidden; transition: transform .3s; }
-    .team:hover { transform: scale(1.02); }
-    .team h2 { background: var(--accent); color: white; padding: 10px; cursor: pointer; }
-    .players { padding: 10px; display: none; animation: fadeIn .5s ease-in; }
-    .player { padding: 5px 0; border-bottom: 1px solid #ccc; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    
-    .fade { opacity: 0; animation: appear .5s forwards; }
-    @keyframes appear { to { opacity: 1; } }
-  </style>
+<meta charset="UTF-8">
+<title>IPL Nexus 2025</title>
+<style>
+  :root { --accent: #005a9c; }
+  body { font-family: sans-serif; margin:0; background:#f0f0f0; transition: background .5s;}
+  .team-btn { padding:8px 12px; margin:5px; border:none; color:white; cursor:pointer; transition: transform .2s; }
+  .team-btn:hover { transform: scale(1.1); }
+</style>
 </head>
-<body data-theme="light">
-  <header>
-    <h1>IPL Nexus 2025</h1>
-    <div class="theme-toggle">🌓 Toggle Theme</div>
-  </header>
-  <nav id="teams-nav"></nav>
-  <section id="teams-container"></section>
+<body>
+<header style="padding:15px;text-align:center;background:var(--accent);color:#fff;">
+  <h1>IPL Nexus 2025</h1>
+</header>
+<nav id="nav"></nav>
+<section id="content" style="padding:20px;"></section>
 
-  <script>
-    const squads = {
-      "Chennai Super Kings": ["MS Dhoni", "Ruturaj Gaikwad", "Ravindra Jadeja", "Devon Conway", "Ravichandran Ashwin"],
-      "Mumbai Indians": ["Rohit Sharma", "Suryakumar Yadav", "Hardik Pandya", "Jasprit Bumrah", "Tilak Varma"],
-      "Royal Challengers Bengaluru": ["Rajat Patidar", "Virat Kohli", "Josh Hazlewood", "Phil Salt", "Liam Livingstone"],
-      "Kolkata Knight Riders": ["Ajinkya Rahane", "Sunil Narine", "Andre Russell", "Quinton de Kock", "Varun Chakravarthy"],
-      "Gujarat Titans": ["Shubman Gill", "Jos Buttler", "Kagiso Rabada", "Rashid Khan", "Mohammed Siraj"],
-      "Punjab Kings": ["Shreyas Iyer", "Yuzvendra Chahal", "Arshdeep Singh", "Glenn Maxwell", "Marcus Stoinis"],
-      "Rajasthan Royals": ["Sanju Samson", "Yashasvi Jaiswal", "Shimron Hetmyer", "Jofra Archer", "Vaibhav Suryavanshi"],
-      "Delhi Capitals": ["KL Rahul", "Faf du Plessis", "Mitchell Starc", "Harry Brook", "Axar Patel"],
-      "Lucknow Super Giants": ["Rishabh Pant", "Nicholas Pooran", "Aiden Markram", "Mitchell Marsh", "David Miller"],
-      "Sunrisers Hyderabad": ["Pat Cummins", "Travis Head", "Ishan Kishan", "Mohammad Shami", "Heinrich Klaasen"]
-    };
+<script>
+const teams = {
+  "Chennai Super Kings": {color:"#FFE000",players:["Dhoni","Gaikwad","Jadeja"]},
+  "Mumbai Indians": {color:"#005CA9",players:["Rohit","Suryakumar","Pandya"]},
+  "RCB": {color:"#C60000",players:["Kohli","Patidar","Hazlewood"]},
+  "Kolkata Knight Riders": {color:"#4B0082",players:["Rahane","Narine","Russell"]},
+  "Gujarat Titans": {color:"#0A1C34",players:["Gill","Buttler","Rabada"]},
+  "Punjab Kings": {color:"#E01B24",players:["Iyer","Chahal","Maxwell"]},
+  "Rajasthan Royals": {color:"#EC1E79",players:["Samson","Jaiswal","Hetmyer"]},
+  "Delhi Capitals": {color:"#00539C",players:["Rahul","du Plessis","Starc"]},
+  "Lucknow Super Giants": {color:"#00AEEF",players:["Pant","Pooran","Markram"]},
+  "Sunrisers Hyderabad": {color:"#FF6200",players:["Cummins","Head","Shami"]},
+};
 
-    const nav = document.getElementById('teams-nav');
-    const container = document.getElementById('teams-container');
+const nav = document.getElementById('nav'), content = document.getElementById('content');
+Object.entries(teams).forEach(([team, info]) => {
+  let btn = document.createElement('button');
+  btn.textContent = team;
+  btn.className = 'team-btn';
+  btn.style.background = info.color;
+  btn.onclick = () => {
+    document.body.style.background = info.color + '33';
+    document.querySelector('header').style.background = info.color;
+    content.innerHTML = `<h2>${team}</h2><ul>${info.players.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  };
+  nav.appendChild(btn);
+});
 
-    Object.keys(squads).forEach((team, i) => {
-      const btn = document.createElement('button');
-      btn.textContent = team;
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.team .players').forEach(p => p.style.display = 'none');
-        document.getElementById(`p-${i}`).style.display = 'block';
-        container.scroll({top: document.getElementById(`t-${i}`).offsetTop, behavior: 'smooth'});
-      });
-      nav.appendChild(btn);
-
-      const div = document.createElement('div');
-      div.className = 'team fade';
-      div.id = `t-${i}`;
-      div.innerHTML = `<h2>${team}</h2><div class="players" id="p-${i}">${squads[team].map(pl=>`<div class="player">${pl}</div>`).join('')}</div>`;
-      div.querySelector('h2').addEventListener('click', () => {
-        const p = div.querySelector('.players');
-        p.style.display = p.style.display==='block'?'none':'block';
-      });
-      container.appendChild(div);
-    });
-
-    document.querySelectorAll('.team').forEach((el, idx)=> {
-      setTimeout(() => el.classList.add('fade'), idx*100);
-    });
-
-    document.querySelector('.theme-toggle').addEventListener('click', () => {
-      document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
-    });
-  </script>
+// Load first team by default
+nav.firstChild.click();
+</script>
 </body>
 </html>
