@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>IPL Nexus 2025</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   :root {
     --bg: #f0f0f0;
     --accent: #005CA9;
   }
+
   body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -15,6 +17,7 @@
     transition: background 0.8s ease;
     overflow-x: hidden;
   }
+
   header {
     padding: 20px;
     text-align: center;
@@ -26,6 +29,7 @@
     transform: translateY(-100%);
     animation: slideIn 1s forwards ease-out;
   }
+
   @keyframes slideIn { to { transform: translateY(0); } }
 
   nav {
@@ -33,8 +37,10 @@
     flex-wrap: wrap;
     justify-content: center;
     padding: 15px;
+    gap: 10px;
     backdrop-filter: blur(15px);
   }
+
   .team-btn {
     margin: 5px;
     padding: 12px 18px;
@@ -43,10 +49,16 @@
     color: #fff;
     font-weight: bold;
     cursor: pointer;
+    font-size: 1rem;
     transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
     overflow: hidden;
+    flex: 1 1 auto;
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
   }
+
   .team-btn::after {
     content: '';
     position: absolute;
@@ -58,14 +70,15 @@
     transform: rotate(45deg);
     transition: top 0.5s, left 0.5s;
   }
+
   .team-btn:hover {
     box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     transform: translateY(-5px) scale(1.05);
   }
+
   .team-btn:hover::after {
     top: 100%;
     left: 100%;
-    transition: top 0.5s, left 0.5s;
   }
 
   #content {
@@ -75,6 +88,7 @@
     display: grid;
     gap: 20px;
   }
+
   .team-card {
     background: rgba(255,255,255,0.75);
     border-radius: 15px;
@@ -85,35 +99,45 @@
     transform: translateY(30px) scale(0.95);
     animation: appear 0.8s forwards ease-out;
   }
+
   @keyframes appear {
     to {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
   }
+
   .team-card h2 {
     margin-bottom: 15px;
-    font-size: 1.8rem;
+    font-size: 2rem;
     letter-spacing: 1px;
     animation: glow 2s infinite alternate;
+    text-align: center;
   }
+
   @keyframes glow {
     from { text-shadow: 0 0 5px rgba(255,255,255,0.6); }
     to { text-shadow: 0 0 20px rgba(255,255,255,1); }
   }
+
   .players-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    padding: 10px 0;
   }
+
   .player {
     background: rgba(255,255,255,0.9);
     padding: 10px;
     border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    transition: transform 0.3s, background 0.3s;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s, background 0.3s;
   }
+
   .player::after {
     content: '';
     position: absolute;
@@ -126,20 +150,51 @@
     z-index: -1;
     opacity: 0.2;
   }
+
   .player:hover {
     transform: translateY(-6px) scale(1.02);
     background: rgba(255,255,255,1);
   }
+
   .player:hover::after {
     width: 100%;
   }
 
   footer {
     text-align: center;
-    padding: 15px;
+    padding: 20px;
     font-size: 0.9rem;
     color: #555;
     margin-bottom: 40px;
+  }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 768px) {
+    .team-btn {
+      font-size: 0.9rem;
+      padding: 10px;
+      min-width: 140px;
+    }
+    .team-card h2 {
+      font-size: 1.5rem;
+    }
+    .players-list {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    nav {
+      gap: 5px;
+      padding: 10px;
+    }
+    .team-btn {
+      min-width: 120px;
+      font-size: 0.85rem;
+    }
+    .players-list {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
   }
 </style>
 </head>
@@ -148,10 +203,9 @@
 <header><h1>IPL Nexus 2025</h1></header>
 <nav id="nav"></nav>
 <main id="content"></main>
-<footer>Built with ❤️ and Cricket Passion</footer>
+<footer>Built with ❤️ on mobile, tablet & desktop!</footer>
 
 <script>
-// Team data: jersey color + key players
 const teams = {
   "Chennai Super Kings": { color:"#FFE000", players:["MS Dhoni","Ruturaj Gaikwad","Ravindra Jadeja","Devon Conway","Ravichandran Ashwin"] },
   "Mumbai Indians": { color:"#005CA9", players:["Rohit Sharma","Suryakumar Yadav","Hardik Pandya","Jasprit Bumrah","Tilak Varma"] },
@@ -168,39 +222,31 @@ const teams = {
 const nav = document.getElementById("nav");
 const content = document.getElementById("content");
 
-// Create navigation buttons
-Object.entries(teams).forEach(([team, info], idx) => {
+Object.entries(teams).forEach(([team, info]) => {
   const btn = document.createElement("button");
   btn.textContent = team;
   btn.className = "team-btn";
   btn.style.background = info.color;
-  btn.addEventListener("click", () => showTeam(team));
+  btn.onclick = () => showTeam(team);
   nav.appendChild(btn);
 });
 
-// Show selected team
 function showTeam(team) {
   const { color, players } = teams[team];
-  document.body.style.background = color + "22"; // light tint
+  document.body.style.background = color + "22";
   document.documentElement.style.setProperty('--accent', color);
 
-  // Clear content
   content.innerHTML = '';
-
-  // Add team card
   const card = document.createElement("section");
   card.className = "team-card";
-  card.style.animationDelay = "0.2s";
   card.innerHTML = `
     <h2>${team}</h2>
     <div class="players-list">
       ${players.map(p => `<div class="player">${p}</div>`).join('')}
-    </div>
-  `;
+    </div>`;
   content.appendChild(card);
 }
 
-// Auto-select first team
 nav.firstChild.click();
 </script>
 
