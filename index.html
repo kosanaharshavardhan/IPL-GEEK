@@ -4,49 +4,205 @@
 <meta charset="UTF-8">
 <title>IPL Nexus 2025</title>
 <style>
-  :root { --accent: #005a9c; }
-  body { font-family: sans-serif; margin:0; background:#f0f0f0; transition: background .5s;}
-  .team-btn { padding:8px 12px; margin:5px; border:none; color:white; cursor:pointer; transition: transform .2s; }
-  .team-btn:hover { transform: scale(1.1); }
+  :root {
+    --bg: #f0f0f0;
+    --accent: #005CA9;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    transition: background 0.8s ease;
+    overflow-x: hidden;
+  }
+  header {
+    padding: 20px;
+    text-align: center;
+    background: var(--accent);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transform: translateY(-100%);
+    animation: slideIn 1s forwards ease-out;
+  }
+  @keyframes slideIn { to { transform: translateY(0); } }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+    backdrop-filter: blur(15px);
+  }
+  .team-btn {
+    margin: 5px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .team-btn::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.3);
+    width: 120%;
+    height: 120%;
+    top: -110%;
+    left: -110%;
+    transform: rotate(45deg);
+    transition: top 0.5s, left 0.5s;
+  }
+  .team-btn:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    transform: translateY(-5px) scale(1.05);
+  }
+  .team-btn:hover::after {
+    top: 100%;
+    left: 100%;
+    transition: top 0.5s, left 0.5s;
+  }
+
+  #content {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: grid;
+    gap: 20px;
+  }
+  .team-card {
+    background: rgba(255,255,255,0.75);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: appear 0.8s forwards ease-out;
+  }
+  @keyframes appear {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .team-card h2 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    animation: glow 2s infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 5px rgba(255,255,255,0.6); }
+    to { text-shadow: 0 0 20px rgba(255,255,255,1); }
+  }
+  .players-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+    gap: 10px;
+  }
+  .player {
+    background: rgba(255,255,255,0.9);
+    padding: 10px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .player::after {
+    content: '';
+    position: absolute;
+    background: var(--accent);
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: width 0.4s ease;
+    z-index: -1;
+    opacity: 0.2;
+  }
+  .player:hover {
+    transform: translateY(-6px) scale(1.02);
+    background: rgba(255,255,255,1);
+  }
+  .player:hover::after {
+    width: 100%;
+  }
+
+  footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 40px;
+  }
 </style>
 </head>
 <body>
-<header style="padding:15px;text-align:center;background:var(--accent);color:#fff;">
-  <h1>IPL Nexus 2025</h1>
-</header>
+
+<header><h1>IPL Nexus 2025</h1></header>
 <nav id="nav"></nav>
-<section id="content" style="padding:20px;"></section>
+<main id="content"></main>
+<footer>Built with ❤️ and Cricket Passion</footer>
 
 <script>
+// Team data: jersey color + key players
 const teams = {
-  "Chennai Super Kings": {color:"#FFE000",players:["Dhoni","Gaikwad","Jadeja"]},
-  "Mumbai Indians": {color:"#005CA9",players:["Rohit","Suryakumar","Pandya"]},
-  "RCB": {color:"#C60000",players:["Kohli","Patidar","Hazlewood"]},
-  "Kolkata Knight Riders": {color:"#4B0082",players:["Rahane","Narine","Russell"]},
-  "Gujarat Titans": {color:"#0A1C34",players:["Gill","Buttler","Rabada"]},
-  "Punjab Kings": {color:"#E01B24",players:["Iyer","Chahal","Maxwell"]},
-  "Rajasthan Royals": {color:"#EC1E79",players:["Samson","Jaiswal","Hetmyer"]},
-  "Delhi Capitals": {color:"#00539C",players:["Rahul","du Plessis","Starc"]},
-  "Lucknow Super Giants": {color:"#00AEEF",players:["Pant","Pooran","Markram"]},
-  "Sunrisers Hyderabad": {color:"#FF6200",players:["Cummins","Head","Shami"]},
+  "Chennai Super Kings": { color:"#FFE000", players:["MS Dhoni","Ruturaj Gaikwad","Ravindra Jadeja","Devon Conway","Ravichandran Ashwin"] },
+  "Mumbai Indians": { color:"#005CA9", players:["Rohit Sharma","Suryakumar Yadav","Hardik Pandya","Jasprit Bumrah","Tilak Varma"] },
+  "Royal Challengers Bengaluru": { color:"#C60000", players:["Rajat Patidar","Virat Kohli","Josh Hazlewood","Phil Salt","Liam Livingstone"] },
+  "Kolkata Knight Riders": { color:"#4B0082", players:["Ajinkya Rahane","Sunil Narine","Andre Russell","Quinton de Kock","Varun Chakravarthy"] },
+  "Gujarat Titans": { color:"#0A1C34", players:["Shubman Gill","Jos Buttler","Kagiso Rabada","Rashid Khan","Mohammed Siraj"] },
+  "Punjab Kings": { color:"#E01B24", players:["Shreyas Iyer","Yuzvendra Chahal","Arshdeep Singh","Glenn Maxwell","Marcus Stoinis"] },
+  "Rajasthan Royals": { color:"#EC1E79", players:["Sanju Samson","Yashasvi Jaiswal","Shimron Hetmyer","Jofra Archer","Vaibhav Suryavanshi"] },
+  "Delhi Capitals": { color:"#00539C", players:["KL Rahul","Faf du Plessis","Mitchell Starc","Harry Brook","Axar Patel"] },
+  "Lucknow Super Giants": { color:"#00AEEF", players:["Rishabh Pant","Nicholas Pooran","Aiden Markram","Mitchell Marsh","David Miller"] },
+  "Sunrisers Hyderabad": { color:"#FF6200", players:["Pat Cummins","Travis Head","Ishan Kishan","Mohammad Shami","Heinrich Klaasen"] }
 };
 
-const nav = document.getElementById('nav'), content = document.getElementById('content');
-Object.entries(teams).forEach(([team, info]) => {
-  let btn = document.createElement('button');
+const nav = document.getElementById("nav");
+const content = document.getElementById("content");
+
+// Create navigation buttons
+Object.entries(teams).forEach(([team, info], idx) => {
+  const btn = document.createElement("button");
   btn.textContent = team;
-  btn.className = 'team-btn';
+  btn.className = "team-btn";
   btn.style.background = info.color;
-  btn.onclick = () => {
-    document.body.style.background = info.color + '33';
-    document.querySelector('header').style.background = info.color;
-    content.innerHTML = `<h2>${team}</h2><ul>${info.players.map(p=>`<li>${p}</li>`).join('')}</ul>`;
-  };
+  btn.addEventListener("click", () => showTeam(team));
   nav.appendChild(btn);
 });
 
-// Load first team by default
+// Show selected team
+function showTeam(team) {
+  const { color, players } = teams[team];
+  document.body.style.background = color + "22"; // light tint
+  document.documentElement.style.setProperty('--accent', color);
+
+  // Clear content
+  content.innerHTML = '';
+
+  // Add team card
+  const card = document.createElement("section");
+  card.className = "team-card";
+  card.style.animationDelay = "0.2s";
+  card.innerHTML = `
+    <h2>${team}</h2>
+    <div class="players-list">
+      ${players.map(p => `<div class="player">${p}</div>`).join('')}
+    </div>
+  `;
+  content.appendChild(card);
+}
+
+// Auto-select first team
 nav.firstChild.click();
 </script>
+
 </body>
 </html>
