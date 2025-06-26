@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPL 2025 Teams & Players</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    header { background: linear-gradient(90deg, #f58220, #005a9c); color:white; padding:20px; text-align:center; }
+    nav { display:flex; justify-content:center; gap:15px; background:#eee; padding:10px; }
+    nav button { padding:10px 20px; border:none; border-radius:5px; cursor:pointer; }
+    nav button.active, nav button:hover { background:#005a9c; color:white; }
+    section { padding:20px; display:none; }
+    section.active { display:block; }
+    .team { margin-bottom:30px; }
+    .team h2 { background: #ddd; padding:10px; border-radius:5px; }
+    .players { display:flex; flex-wrap:wrap; gap:10px; }
+    .player { flex:1 1 150px; background: #f9f9f9; padding:10px; border:1px solid #ccc; border-radius:5px; }
+    .highlight { background: linear-gradient(90deg,#ffeb3b,#ff9800); padding:5px; border-radius:3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏏 IPL 2025 Teams & Players</h1>
+    <p>Latest squad info & captain highlights</p>
+  </header>
+
+  <nav id="tabs">
+    <button class="active" data-target="overview">Overview</button>
+    <button data-target="mumbai">Mumbai Indians</button>
+    <button data-target="punjab">Punjab Kings</button>
+    <button data-target="rajasthan">Rajasthan Royals</button>
+    <button data-target="rcb">RCB</button>
+  </nav>
+
+  <section id="overview" class="active">
+    <h2>IPL 2025 Overview</h2>
+    <p>The IPL 2025 (18th season) features 10 teams, playing from March 22 to May 25, with the final at Eden Gardens </p>
+    <p>Top auction picks:</p>
+    <ul>
+      <li class="highlight"><strong>Rishabh Pant</strong> – record ₹27 cr to Lucknow SG </li>
+      <li class="highlight"><strong>Shreyas Iyer</strong> – ₹26.75 cr to Punjab Kings </li>
+      <li><strong>Vaibhav Suryavanshi</strong> (14-year‑old) – youngest IPL player, hit a six on debut </li>
+    </ul>
+  </section>
+
+  <section id="mumbai">
+    <div class="team">
+      <h2>Mumbai Indians (Captain: Hardik Pandya)</h2>
+      <div class="players">
+        <div class="player"><strong>Rohit Sharma</strong> – Batter</div>
+        <div class="player"><strong>Suryakumar Yadav</strong> – Batter</div>
+        <div class="player"><strong>Hardik Pandya</strong> – All-rounder & Captain</div>
+        <div class="player"><strong>Jasprit Bumrah</strong> – Fast Bowler</div>
+        <div class="player"><strong>Tilak Varma</strong> – Batter</div>
+        <div class="player"><strong>Will Jacks</strong> – Batter (ENG)</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="punjab">
+    <div class="team">
+      <h2>Punjab Kings (Captain: Shreyas Iyer)</h2>
+      <div class="players">
+        <div class="player"><strong>Shreyas Iyer</strong> – Captain/Batter</div>
+        <div class="player"><strong>Yuzvendra Chahal</strong> – Spinner</div>
+        <div class="player"><strong>Arshdeep Singh</strong> – Fast Bowler</div>
+        <div class="player"><strong>Glenn Maxwell</strong> – All‑rounder (AUS)</div>
+        <div class="player"><strong>Marcus Stoinis</strong> – All‑rounder (AUS)</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rajasthan">
+    <div class="team">
+      <h2>Rajasthan Royals (Captain: Sanju Samson)</h2>
+      <div class="players">
+        <div class="player"><strong>Sanju Samson</strong> – Captain/Batter</div>
+        <div class="player"><strong>Yashasvi Jaiswal</strong> – Batter</div>
+        <div class="player"><strong>Shimron Hetmyer</strong> – Batter (WI)</div>
+        <div class="player"><strong>Jofra Archer</strong> – Fast Bowler (ENG)</div>
+        <div class="player"><strong>Vaibhav Suryavanshi</strong> – Batter (14‑yr‑old)</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rcb">
+    <div class="team">
+      <h2>RCB (Captain: Rajat Patidar)</h2>
+      <div class="players">
+        <div class="player"><strong>Rajat Patidar</strong> – Captain/Batter</div>
+        <div class="player"><strong>Virat Kohli</strong> – Batter</div>
+        <div class="player"><strong>Josh Hazlewood</strong> – Fast Bowler (AUS)</div>
+        <div class="player"><strong>Phil Salt</strong> – Wicket‑keeper/Batter (ENG)</div>
+        <div class="player"><strong>Liam Livingstone</strong> – All‑rounder (ENG)</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('tabs').addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+        e.target.classList.add('active');
+        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(e.target.dataset.target).classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
